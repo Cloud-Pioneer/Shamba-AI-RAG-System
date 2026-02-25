@@ -1,1 +1,94 @@
-design_decisions.md
+Design Decisions – Shamba AI
+
+This document explains the architectural and engineering decisions behind Shamba AI and the reasoning behind each choice.
+
+The goal of this project was not just to integrate an LLM, but to design a production-minded, reliable, and cost-aware serverless AI system.
+
+Why DynamoDB for Conversation Memory
+Shamba AI supports multi-turn conversations.
+We need to:
+Store user history
+Retrieve recent messages quickly
+Scale automatically
+Keep operational overhead low
+
+Amazon DynamoDB was selected because:
+
+Fully managed (no server management)
+Single-digit millisecond latency
+Seamless integration with Lambda
+Automatically scales with traffic
+Pay-per-request pricing model
+
+The data model is straightforward:
+
+Partition Key: phone (user identifier)
+
+Sort Key: timestamp 
+
+This allows for fast retrieval of the most recent messages and efficient per-user conversation tracking. 
+
+Alternatives Considered:
+RDS	would have been an overkill for simple key-value history. 
+ElastiCache	Adds infrastructure complexity
+
+Why Serverless (Lambda + API Gateway)
+
+Serverless was chosen because:
+No EC2 provisioning
+No patching or server maintenance
+Automatic scaling
+Pay only when invoked
+Ideal for unpredictable workloads
+Shamba AI does not require long running processes, persistent compute or complex orchestration. 
+Therefore, serverless is the most efficient and clean architectural choice.
+
+Why Fallback Logic
+RAG systems risk failure due to no matching documents in Knowledge Base or retrieval misconfiguration. 
+If not handled, this leads to poor user experience and system unreliability. 
+
+The solution impelemented was this, If RAG fails or returns empty/weak output the system automatically invokes base model directly. 
+This ensures graceful degradation and high system reliability. 
+
+Why Token Limits
+LLMs charge based on token usage. Without control costs can grow unpredictably and responses can become unnecessarily long. 
+
+Implementation
+Token limits are set using:
+max_tokens
+
+The benefits are predictable cost behaviour and faster and more concise repsonses. 
+This reflects cost-aware engineering practices.
+
+Tradeoffs: RAG vs Base Model
+Retrieval-Augmented Generation (RAG)
+Advantages
+Grounded in curated documents
+Better factual accuracy
+Domain-specific responses
+Disadvantages
+Additional latency (retrieval step)
+More complex architecture
+Dependent on document quality
+Slightly higher cost per request
+
+Direct Base Model
+Advantages
+Simpler
+Faster
+No retrieval dependency
+Works for general knowledge questions
+Disadvantages
+Not grounded in specific documents
+Less reliable for domain-specific queries
+
+Why Hybrid Approach Was Used
+Shamba AI combines both: The RAG approach is tried first before falling back to base model if necessary
+This provides:
+Accuracy when KB data exists
+Reliability when KB fails
+Balanced cost-performance tradeoff
+
+Operational & Observability Mindset
+Beyond functionality, the system logs execution duration, memory usage, RAG vs fallback path and estimated token usage
+This demonstrates awareness of perfomance monitoring, cost visibility and production debugging practices. 
