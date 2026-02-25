@@ -49,16 +49,16 @@ def log_cost_estimate(response_metadata):
         output_cost = (output_tokens / 1_000_000) * 1.25
         total_cost = input_cost + output_cost
 
-        print("📊 TOKEN USAGE")
+        print("TOKEN USAGE")
         print(f"Input Tokens: {input_tokens}")
         print(f"Output Tokens: {output_tokens}")
         print(f"Total Tokens: {total_tokens}")
 
-        print("💰 ESTIMATED COST")
+        print("ESTIMATED COST")
         print(f"Estimated Request Cost: ${total_cost:.8f}")
 
     except Exception as e:
-        print("⚠️ Cost logging failed:", str(e))
+        print("Cost logging failed:", str(e))
 
 # HELPER: DIRECT MODEL (Fallback)
 def call_direct_model(prompt):
@@ -151,12 +151,12 @@ Farmer question:
 
             # Fallback if KB failed
             if not reply or "unable to assist" in reply.lower():
-                print("⚠️ RAG returned empty result. Falling back to base model.")
+                print("RAG returned empty result. Falling back to base model.")
                 reply = call_direct_model(prompt)
 
         except Exception as rag_error:
-            print("❌ RAG failed:", str(rag_error))
-            print("⚠️ Falling back to base model.")
+            print("RAG failed:", str(rag_error))
+            print("Falling back to base model.")
             reply = call_direct_model(prompt)
 
         STEP 4: STORE CONVERSATION
@@ -188,7 +188,7 @@ Farmer question:
         }
 
     except Exception as e:
-        print("❌ Unexpected error:", str(e))
+        print("Unexpected error:", str(e))
         return {
             "statusCode": 500,
             "body": json.dumps({"error": "Internal server error"})
