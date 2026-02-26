@@ -138,7 +138,7 @@ Farmer question:
                     "type": "KNOWLEDGE_BASE",
                     "knowledgeBaseConfiguration": {
                         "knowledgeBaseId": os.environ.get("KNOWLEDGE_BASE_ID")
-                        "modelArn": os.environ.get("MODEL_ARN")
+                        "modelArn": os.environ.get("MODEL_ARN"), 
                     }
                 }
             )
@@ -159,7 +159,7 @@ Farmer question:
             print("Falling back to base model.")
             reply = call_direct_model(prompt)
 
-        STEP 4: STORE CONVERSATION
+       # STEP 4: STORE CONVERSATION
       
         timestamp = str(int(time.time()))
 
