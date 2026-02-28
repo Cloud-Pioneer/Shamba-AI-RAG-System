@@ -7,7 +7,6 @@ Shamba AI is a serverless AI-powered agricultural advisory system designed to as
 
 The system uses Retrieval-Augmented Generation (RAG) with Amazon Bedrock to provide context-aware, knowledge-grounded responses. Built fully on AWS using a serverless architecture.
 
-# Architecture
 # Services Used:
 Amazon API Gateway
 AWS Lambda
