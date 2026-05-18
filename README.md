@@ -1,6 +1,5 @@
 Shamba AI — AI-Powered Agricultural Advisory System for Smallholder Farmers
-Overview
-
+# Overview
 Shamba AI is a serverless agricultural advisory platform built on AWS that helps smallholder farmers access fast, practical, and affordable farming advice using Artificial Intelligence.
 
 The system combines Generative AI, Retrieval-Augumented Generation (RAG) , Conversation memory, Knowledge-base retrieval and Serverless cloud architecture to deliver context aware agricultural recommendations in real time. 
@@ -18,7 +17,8 @@ Shamba AI addresses this challenge by providing:
 
 The system is designed to support farmers using simple interfaces such as SMS and mobile applications.
 
-Architecture Overview
+# Architecture Overview
+
 Shamba AI is built using a fully serverless AWS architecture.
 
 AWS Services Used;
@@ -30,7 +30,7 @@ Amazon Bedrock Knowledge Base — Provides Retrieval-Augmented Generation (RAG)
 Amazon S3 — Stores agricultural documents and datasets
 Amazon CloudWatch — Logging, monitoring, observability, and cost awareness
 
-How the System Works;
+# How the System Works;
 Farmer sends a question through API Gateway
 AWS Lambda receives the request
 Conversation history is retrieved from DynamoDB
