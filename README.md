@@ -1,124 +1,69 @@
-# Shamba-AI-RAG-System
-Serverless AI Agricultural Advisory System using AWS Lambda, Bedrock, DynamoDB and RAG
-# Shamba AI – Serverless Agricultural Advisory System
-# Overview
+Shamba AI — AI-Powered Agricultural Advisory System for Smallholder Farmers
+Overview
 
-Shamba AI is a serverless AI-powered agricultural advisory system designed to assist smallholder farmers with crop-related guidance.
+Shamba AI is a serverless agricultural advisory platform built on AWS that helps smallholder farmers access fast, practical, and affordable farming advice using Artificial Intelligence.
 
-The system uses Retrieval-Augmented Generation (RAG) with Amazon Bedrock to provide context-aware, knowledge-grounded responses. Built fully on AWS using a serverless architecture.
+The system combines Generative AI, Retrieval-Augumented Generation (RAG) , Conversation memory, Knowledge-base retrieval and Serverless cloud architecture to deliver context aware agricultural recommendations in real time. 
 
-# Services Used:
-Amazon API Gateway
-AWS Lambda
-Amazon DynamoDB
-Amazon Bedrock (Claude 3 Haiku)
-Amazon Bedrock Knowledge Base (RAG)
-Amazon S3 (document storage)
-Amazon CloudWatch (logging & monitoring)
+The goal is to make reliable farming knowledge accessible to farmers who may not have immediate access to agronomists or extension officers.
 
-# System Flow
-User sends request via API Gateway
-Lambda receives and parses JSON input
-Conversation memory fetched from DynamoDB
-Knowledge Base retrieval via Bedrock
+This Project Matters because Agriculture supports millions of livelihoods across Kenya yet many farmers lack access to timely agricultural guidanceand can't afford professional consultancy services. 
 
-If retrieval fails → fallback to base model
+Shamba AI addresses this challenge by providing:
+- Instant farming advice
+- Context-aware conversations
+- Knowledge-grounded responses
+- Low-cost scalable infrastructure
+- Cloud-native automation
 
-Response generated
-Conversation stored in DynamoDB
-Logs and token usage captured in CloudWatch
+The system is designed to support farmers using simple interfaces such as SMS and mobile applications.
 
-# Key Features
-Multi-turn conversation memory
-Retrieval-Augmented Generation (RAG)
-Fallback logic when KB returns empty
-Defensive error handling
-Observability mindset
-Basic cost awareness logging
-Serverless architecture (no servers to manage)
+Architecture Overview
+Shamba AI is built using a fully serverless AWS architecture.
 
-# Technical Design Decisions
-# Why Serverless?
-No infrastructure management
-Automatic scaling
-Cost-efficient (pay-per-invocation)
-Ideal for unpredictable workloads
+AWS Services Used;
+Amazon API Gateway — Receives incoming farmer requests
+AWS Lambda — Handles application logic
+Amazon DynamoDB — Stores conversation memory
+Amazon Bedrock — Generates AI responses using Claude 3 Haiku
+Amazon Bedrock Knowledge Base — Provides Retrieval-Augmented Generation (RAG)
+Amazon S3 — Stores agricultural documents and datasets
+Amazon CloudWatch — Logging, monitoring, observability, and cost awareness
 
-# Why DynamoDB for Memory?
-Low latency
-Fully managed
-Scales automatically
-Simple partition key (phone number) enables per-user conversation memory
+How the System Works;
+Farmer sends a question through API Gateway
+AWS Lambda receives the request
+Conversation history is retrieved from DynamoDB
+Lambda builds a context-aware prompt
+Amazon Bedrock Knowledge Base retrieves relevant agricultural information
+Claude 3 Haiku generates the response
+If retrieval fails, fallback logic invokes the base model directly
+Response is returned to the farmer
+Conversation is stored for future memory
+Logs and usage metadata are captured in CloudWatch
 
-# Why RAG?
-LLMs alone may hallucinate.
-RAG ensures:
-Responses grounded in agricultural documentation
-Reduced hallucinations
-Better factual accuracy
+Some of the Key Features implemented in the project are;
+- Multi-Turn Conversation Memory
+The system remembers previous farmer interactions using DynamoDB. For example, the farmer texts "Why are my maize leaves yellow?" then later texts " It is at seedling stage" 
+The AI understands the follow-up context.
 
-# Why Fallback Logic?
-Knowledge retrieval may fail due to no matching documents or KB misconfiguration
+- Retrieval-Augmented Generation (RAG)
+Instead of relying only on general AI knowledge, the system retrieves trusted agricultural information from uploaded farming documents stored in Amazon S3.
 
-Runtime errors
-Fallback to base model ensures system reliability and no user facing failures
+This improves accuracy, relevance and reliability. 
 
-# Monitoring & Operational Awareness
-The system logs:
-Request payload metadata
-Retrieval path used (RAG or fallback)
-Execution duration
-Memory usage
-Estimated token consumption
+- Fallback Logic
+If the Knowledge Base retrieval fails or returns weak results the system automatically falls back to the base model ensuring the farmer still receives assistance. 
 
-CloudWatch provides:
-Execution tracing
-Debugging visibility
-Performance analysis
-Failure investigation
-This demonstrates production-level operational thinking.
+- Observability & Monitoring
+CloudWatch logging was implemented to support:
+Request monitoring
+Error tracking
+Token usage tracking
+Execution duration visibility
+Basic operational observability
 
-# Cost Control Considerations
-The architecture minimizes cost by:
-Using lightweight model (Claude 3 Haiku)
-Limiting max tokens
-Avoiding unnecessary repeated model calls
-Logging usage for future cost analysis
-Using serverless services (no idle infrastructure cost)
+- Cost-Aware Design
+The project was intentionally designed with cost optimization in mind. The use of serveless architecture, lightweight model selection, token usage logging and controlled response sizes all adapted with cost control in mind. 
 
-# How to Test
-Sample API Request
-curl -X POST "YOUR_API_GATEWAY_URL" \
--H "Content-Type: application/json" \
--d '{"phone":"+254700000000","message":"What are the symptoms of Grey Leaf Spot in maize?"}'
-Example JSON Response
-{
-  "phone": "+254700000000",
-  "reply": "The main symptoms include long, narrow grey lesions restricted by veins...",
-  "timestamp": "1771964895"
-}
-
-# Security Considerations
-No credentials stored in code
-IAM role-based access
-Principle of least privilege
-No sensitive user data stored beyond conversation context
-
-# Edge Cases Handled
-Missing phone or message → 400 error
-Knowledge base empty response → fallback
-Bedrock runtime failure → fallback
-Unexpected runtime errors → 500 response
-
-# Skills Demonstrated
-AWS Serverless Architecture
-API Design
-Event-driven Systems
-DynamoDB Data Modeling
-AI Integration with Bedrock
-RAG Implementation
-Error Handling & Resilience
-Observability & Monitoring
-Cost-aware Engineering
-Production-minded Design Thinking
 
